@@ -1,0 +1,290 @@
+# Configuration
+
+Complete configuration reference for Ludus FastMCP, including environment variables, MCP client setup, and advanced options.
+
+## Environment Variables
+
+### Required
+
+| Variable | Description | Example |
+|----------|-------------|---------|
+| `LUDUS_API_URL` | Ludus server URL | `https://ludus.example.com:8080` |
+| `LUDUS_API_KEY` | API authentication key | `username.abc123def456` |
+
+### Optional
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `LUDUS_SSL_VERIFY` | `false` | Enable SSL certificate verification |
+| `LOG_LEVEL` | `INFO` | Logging verbosity (DEBUG, INFO, WARNING, ERROR) |
+
+### SSH Role Installation (Optional)
+
+For automatic Ansible role installation from Git repositories:
+
+| Variable | Description |
+|----------|-------------|
+| `LUDUS_SSH_HOST` | Ludus server SSH hostname |
+| `LUDUS_SSH_USER` | SSH username |
+| `LUDUS_SSH_KEY_PATH` | Path to SSH private key |
+| `LUDUS_SSH_PASSWORD` | SSH password (if not using key) |
+| `LUDUS_ALLOW_SSH_INSTALL` | Set to `true` to enable SSH-based role installation |
+
+## Configuration Methods
+
+### Method 1: Interactive Setup (Recommended)
+
+```bash
+ludus-fastmcp --setup
+```
+
+The setup wizard configures all required settings interactively.
+
+### Method 2: Environment File
+
+Create a `.env` file in your working directory:
+
+```bash
+LUDUS_API_URL=https://your-ludus-instance:8080
+LUDUS_API_KEY=username.your-api-key
+LUDUS_SSL_VERIFY=false
+LOG_LEVEL=INFO
+```
+
+### Method 3: Shell Export
+
+```bash
+export LUDUS_API_URL="https://your-ludus-instance:8080"
+export LUDUS_API_KEY="username.your-api-key"
+```
+
+### Method 4: MCP Client Configuration
+
+Environment variables can be set directly in your MCP client's configuration file. This approach keeps credentials isolated per client.
+
+## MCP Client Configuration
+
+For detailed setup instructions for each client, see [Getting Started](getting-started.md#mcp-client-configuration).
+
+### Using Full Path
+
+If your MCP client cannot locate `ludus-fastmcp`, use the full path:
+
+```json
+{
+  "mcpServers": {
+    "ludus": {
+      "command": "/home/username/.local/bin/ludus-fastmcp",
+      "env": {
+        "LUDUS_API_URL": "https://your-ludus-instance:8080",
+        "LUDUS_API_KEY": "username.your-api-key"
+      }
+    }
+  }
+}
+```
+
+Find your installation path:
+
+```bash
+which ludus-fastmcp
+```
+
+## Multiple Ludus Servers
+
+Connect to multiple Ludus instances by creating separate MCP server entries:
+
+```json
+{
+  "mcpServers": {
+    "ludus-prod": {
+      "command": "ludus-fastmcp",
+      "env": {
+        "LUDUS_API_URL": "https://prod.ludus.example.com:8080",
+        "LUDUS_API_KEY": "produser.api-key"
+      }
+    },
+    "ludus-dev": {
+      "command": "ludus-fastmcp",
+      "env": {
+        "LUDUS_API_URL": "https://dev.ludus.example.com:8080",
+        "LUDUS_API_KEY": "devuser.api-key"
+      }
+    }
+  }
+}
+```
+
+Specify which server to use in commands:
+- "Using ludus-prod, show my ranges"
+- "Using ludus-dev, deploy ad-basic"
+
+## SSL Configuration
+
+### Self-Signed Certificates
+
+Most Ludus installations use self-signed certificates. SSL verification is disabled by default:
+
+```bash
+LUDUS_SSL_VERIFY=false
+```
+
+### Valid Certificates
+
+For production environments with valid SSL certificates:
+
+```bash
+LUDUS_SSL_VERIFY=true
+```
+
+## Server Operation Modes
+
+### Foreground Mode (Default)
+
+Standard MCP server operation:
+
+```bash
+ludus-fastmcp
+```
+
+### Verbose Mode
+
+Display detailed logging during operation:
+
+```bash
+ludus-fastmcp --verbose
+```
+
+### Daemon Mode
+
+Run as a background service:
+
+```bash
+ludus-fastmcp --daemon          # Start
+ludus-fastmcp --status          # Check status
+ludus-fastmcp --stop-daemon     # Stop
+```
+
+Daemon files:
+- PID file: `~/.ludus-fastmcp/ludus-fastmcp.pid`
+- Log file: `~/.ludus-fastmcp/ludus-fastmcp.log`
+
+## Logging
+
+### Log Levels
+
+| Level | Description |
+|-------|-------------|
+| `DEBUG` | Detailed debugging information |
+| `INFO` | General operational messages |
+| `WARNING` | Warning messages |
+| `ERROR` | Error messages only |
+
+### Enable Debug Logging
+
+```bash
+export LOG_LEVEL=DEBUG
+ludus-fastmcp --verbose
+```
+
+### View Logs
+
+```bash
+# Daemon logs
+tail -f ~/.ludus-fastmcp/ludus-fastmcp.log
+
+# Filter errors
+grep ERROR ~/.ludus-fastmcp/ludus-fastmcp.log
+```
+
+## API Key Management
+
+### Retrieve Key
+
+On your Ludus server:
+
+```bash
+ludus user apikey
+```
+
+### Key Format
+
+Keys follow the format: `username.key-value`
+
+Example: `admin.a1b2c3d4e5f6g7h8`
+
+### Security Practices
+
+- Store keys in environment variables or MCP client configuration
+- Do not commit keys to version control
+- Add `.env` to `.gitignore`
+- Rotate keys periodically via Ludus CLI
+- Use separate keys for development and production
+
+## Verification
+
+### Test Configuration
+
+```bash
+# Verify environment variables
+echo $LUDUS_API_URL
+echo $LUDUS_API_KEY
+
+# Test server startup
+ludus-fastmcp --verbose
+
+# List tools (confirms installation)
+ludus-fastmcp --list-tools
+```
+
+### Test Connectivity
+
+```bash
+# Test Ludus API directly
+curl -k -H "X-API-KEY: $LUDUS_API_KEY" $LUDUS_API_URL/
+
+# Expected: JSON response with server info
+```
+
+### Test MCP Integration
+
+After configuring your MCP client:
+
+```
+List all available Ludus tools
+```
+
+Successful response displays 157 tools organized by category.
+
+## ludus-ai Client Configuration
+
+The `ludus-ai` CLI provides additional functionality:
+
+### Local LLM Setup
+
+```bash
+ludus-ai setup-llm
+```
+
+Configures Ollama for local LLM support.
+
+### Chat Interface Installation
+
+```bash
+ludus-ai install anythingllm    # Recommended
+ludus-ai install openwebui
+ludus-ai install opencode
+```
+
+### Cache Management
+
+```bash
+ludus-ai clear-cache --all
+ludus-ai clear-cache --opencode
+```
+
+## Related Documentation
+
+- [Getting Started](getting-started.md) - Installation and initial setup
+- [Tools Reference](tools-reference.md) - Complete tool documentation
+- [Troubleshooting](troubleshooting.md) - Common issues and solutions
